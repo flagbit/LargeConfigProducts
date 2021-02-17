@@ -1,12 +1,22 @@
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'underscore',
+    'jquery-ui-modules/widget'
+], function ($, _) {
     'use strict';
 
     return function (widget) {
         $.widget('mage.configurable', widget, {
             // Load jsonConfig through AJAX call instead of in-line
             _create: function () {
+                //save _super for the callback
+                const originalInit = this._super.bind(this);
+
+                if (!_.isNull(this.options.spConfig)) {
+                    originalInit();
+                    return;
+                }
+
                 var that = this;
                 var productData = this._determineProductData();
                 $.ajax({
@@ -21,30 +31,8 @@ define([
                     $('#product-options-spinner').remove();
                     $('#product-options-wrapper > .fieldset').show();
                     that.options.spConfig = data;
-                    that._trueCreate();
+                    originalInit();
                 });
-            },
-
-            _trueCreate: function () {
-                // Initial setting of various option values
-                this._initializeOptions();
-
-                // Override defaults with URL query parameters and/or inputs values
-                this._overrideDefaults();
-
-                // Change events to check select reloads
-                this._setupChangeEvents();
-
-                // Fill state
-                this._fillState();
-
-                // Setup child and prev/next settings
-                this._setChildSettings();
-
-                // Setup/configure values to inputs
-                this._configureForValues();
-
-                $(this.element).trigger('configurable.initialized');
             },
 
             // Copied from swatch-renderer.js
