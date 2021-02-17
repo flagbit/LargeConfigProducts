@@ -1,6 +1,8 @@
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'underscore',
+    'jquery-ui/widget'
+], function ($, _) {
     'use strict';
 
     return function (widget) {
@@ -8,10 +10,12 @@ define([
             // Load jsonConfig through AJAX call instead of in-line
             _init: function () {
                 if (!_.isNull(this.options.jsonConfig)) {
+                    this._super();
                     return;
                 }
-                var that = this;
-                var productData = this._determineProductData();
+                let that = this,
+                    productData = this._determineProductData();
+
                 $.ajax({
                     url: this.options.baseUrl + '/lcp/fetch/productOptions',
                     type: 'GET',
@@ -41,9 +45,9 @@ define([
                     $(updatedSelectBoxes).change();
 
                     // Preselect swatch if only 1 swatch exists
-                    const selectSwatch = document.querySelectorAll('.swatch-option');
-                    if($(selectSwatch).length == 1) {
-                        $(selectSwatch).trigger("click");
+                    const selectSwatch = $('.swatch-option');
+                    if(selectSwatch.length === 1) {
+                        selectSwatch.trigger("click");
                     }
                 });
             },
@@ -89,5 +93,5 @@ define([
         });
 
         return $.mage.SwatchRenderer;
-    }
+    };
 });
