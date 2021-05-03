@@ -28,4 +28,7 @@
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\Template"
                 type="Elgentos\LargeConfigProducts\Model\View\TemplateEngine\Xhtml\Template" />
 
+    <preference for="Magento\Swatches\Block\Product\Renderer\Configurable"
+                type="Elgentos\LargeConfigProducts\Block\Product\Renderer\Configurable"/>
+
 </config>
